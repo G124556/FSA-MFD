@@ -1,0 +1,56 @@
+# FSA-MFD 配置文件 - LEVIR-CD 数据集
+# 使用方法: python train.py --config configs/levir_cd.yaml
+
+# ============================================================
+# 数据集配置
+# ============================================================
+dataset:
+  name: levir-cd
+  root: ./data/LEVIR-CD
+  img_size: 256
+  batch_size: 8
+  num_workers: 4
+
+# ============================================================
+# 模型配置
+# ============================================================
+model:
+  input_size: 256
+  pretrained: true
+  alpha: 0.2          # FSA 低频掩码 H 方向学习范围
+  beta: 0.2           # FSA 低频掩码 W 方向学习范围
+  bank_size: 1000     # 全局记忆库容量
+  num_anchors: 32     # 局部记忆库锚点数/批次
+  num_samples: 16     # 对比学习正负样本数 N
+  temperature: 0.07   # InfoNCE 温度 τ
+  contrastive_weight: 0.1  # 对比损失权重 λ
+
+# ============================================================
+# 训练配置
+# ============================================================
+train:
+  epochs: 200
+  optimizer: adamw
+  lr: 1.0e-4
+  weight_decay: 1.0e-4
+  scheduler: cosine    # cosine annealing
+  warmup_epochs: 5
+  grad_clip: 1.0
+  seed: 42
+  amp: true            # 混合精度训练
+
+# ============================================================
+# 评估配置
+# ============================================================
+eval:
+  threshold: 0.5
+  eval_freq: 1         # 每N个epoch评估一次
+  save_pred: false     # 是否保存预测图
+
+# ============================================================
+# 输出配置
+# ============================================================
+output:
+  save_dir: ./outputs/levir_cd
+  log_dir: ./outputs/levir_cd/logs
+  max_checkpoints: 5

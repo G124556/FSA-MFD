@@ -1,0 +1,40 @@
+# FSA-MFD 配置文件 - CDD (DSIFN-CD) 数据集
+
+dataset:
+  name: cdd
+  root: ./data/CDD
+  img_size: 256
+  batch_size: 8
+  num_workers: 4
+
+model:
+  input_size: 256
+  pretrained: true
+  alpha: 0.2
+  beta: 0.2
+  bank_size: 1000
+  num_anchors: 32
+  num_samples: 16
+  temperature: 0.07
+  contrastive_weight: 0.1
+
+train:
+  epochs: 200
+  optimizer: adamw
+  lr: 1.0e-4
+  weight_decay: 1.0e-4
+  scheduler: cosine
+  warmup_epochs: 5
+  grad_clip: 1.0
+  seed: 42
+  amp: true
+
+eval:
+  threshold: 0.5
+  eval_freq: 1
+  save_pred: false
+
+output:
+  save_dir: ./outputs/cdd
+  log_dir: ./outputs/cdd/logs
+  max_checkpoints: 5
